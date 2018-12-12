@@ -1,9 +1,9 @@
 import React from 'react';
 import {withStyles} from "@material-ui/core/styles/index";
 import {Grid, Typography} from '@material-ui/core';
-import {formatMoney} from "../../../api/ApiUtils";
+import {formatMoney, redirectUrl} from "../../../api/ApiUtils";
 import {withRouter} from "react-router-dom";
-import {redirectUrl} from "../../../api/ApiUtils";
+import classNames from 'classnames'
 
 const styles = theme => ({
     name: {
@@ -22,8 +22,20 @@ const styles = theme => ({
         color: theme.palette.secondary.light,
         marginTop: '15px',
     },
+    box: {
+        backgroundImage: 'url(http://i.imgur.com/hHUa9Ty.jpg)',
+        height: '100%',
+        float: 'left',
+        transition: 'height 1s',
+        webkitTransition: 'height 1s',
 
-    root: {
+        '&:hover': {
+
+            height: '100%'
+        }
+
+    }, root: {
+        width: '100%',
         minHeight: '340px',
         padding: '10px 20px 20px',
         borderRadius: '2px'
@@ -43,6 +55,19 @@ const styles = theme => ({
         color: '#333333',
         fontFamily: 'arial',
         lineHeight: 1,
+    },
+    hiddenContent: {
+        display: 'none'
+    },
+
+    flowingDown: {
+        '&:hover >div': {
+            display: 'block',
+        },
+        '&:hover': {
+            opacity: '0.4',
+        }
+
     }
 
 })
@@ -75,34 +100,41 @@ class ResponsiveDialog extends React.Component {
         const {classes, src, name, id, category, regPrice, promotePrice} = this.props;
 
         return (
-            <Grid container className={classes.root} direction={'column'}>
-                <div style={{ backgroundImage: 'url(' + src + ')'}}
-                     onClick={() => id && redirectUrl('/products/' + id,this.props.history)}
-                     className={classes.img}></div>
-                {
-                    category && <Typography variant={'headline'}
-                                            className={classes.category}
+            <Grid container className={classNames(classes.root, classes.flowingDown)}
+                  direction={'column'}
+                  alignItems={'center'}
+                  style={{backgroundImage: `url(${src})`}}
+                  onClick={() => id && redirectUrl('/products/' + id, this.props.history)}
 
-                                            color={'primary'}>{category && category.join(',')}</Typography>
+            >
+                <Grid item className={classes.hiddenContent}>
 
-                }
-                <Typography variant={'title'}
-                            onClick={() => window.location.href = ('/products/' + id)}
-                            className={classes.name}
+                    {
+                        category && <Typography variant={'headline'}
+                                                className={classes.category}
 
-                >{name}</Typography>
-                {
-                    (promotePrice) ?
-                        <Grid item container direction={'row'}>
-                            <Typography component={'del'} variant={'subheading'}
-                                        className={classes.oldPrice}>$ {formatMoney(regPrice)}</Typography>
-                            <Typography variant={'caption'}
-                                        className={classes.price}>${formatMoney(promotePrice)}</Typography>
-                        </Grid>
-                        : <Typography variant={'caption'}
-                                      className={classes.price}>$ {formatMoney(regPrice)}</Typography>
+                                                color={'primary'}>{category && category.join(',')}</Typography>
 
-                }
+                    }
+                    <Typography variant={'title'}
+                                onClick={() => window.location.href = ('/products/' + id)}
+                                className={classes.name}
+
+                    >{name}</Typography>
+                    {
+                        (promotePrice) ?
+                            <Grid item container direction={'row'}>
+                                <Typography component={'del'} variant={'subheading'}
+                                            className={classes.oldPrice}>$ {formatMoney(regPrice)}</Typography>
+                                <Typography variant={'caption'}
+                                            className={classes.price}>${formatMoney(promotePrice)}</Typography>
+                            </Grid>
+                            : <Typography variant={'caption'}
+                                          className={classes.price}>$ {formatMoney(regPrice)}</Typography>
+
+                    }
+                </Grid>
+
 
             </Grid>
         );

@@ -37,7 +37,8 @@ const style = theme => ({
         fontSize: '30px',
         fontWeight: '450',
 
-    }
+    },
+
 
 })
 
@@ -65,8 +66,8 @@ class SimpleSlider extends React.Component {
 
                     {
 
-                        data.map((n, i) => (<div key={i}>
-
+                        data.map((n, i) => (
+                            <div key={i}>
                                     <Grid container
                                           alignItems={'center'}
                                           justify={'center'}
@@ -74,7 +75,6 @@ class SimpleSlider extends React.Component {
                                               backgroundImage: 'url("' + n.url + '")',
                                           })}
                                           onClick={() => n.link ? redirectUrl(n.link,this.props.history) : null}
-
                                           className={classes.img}>
                                         {n.title && <Grid item lg={4}>
                                             <Typography variant="display4" className={classes.title}

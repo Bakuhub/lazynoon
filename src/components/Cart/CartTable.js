@@ -137,7 +137,6 @@ class ShoppingCartTable extends React.Component {
 
                                         </TableCell>
 
-
                                         <TableCell
                                             className={classes.block}
                                             numeric>

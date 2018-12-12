@@ -1,5 +1,6 @@
 import React from "react";
 import {withStyles} from '@material-ui/core/styles';
+import PropTypes from 'prop-types';
 
 const style = theme => ({
     root: {
@@ -30,6 +31,7 @@ class PrevArrow extends React.Component {
         const {classes, className, style, onClick} = this.props;
         return (
             <span
+
                 className={classes.root + ' ' + 'icon-circle-left'}
                 style={{...style}}
                 onClick={onClick}
@@ -42,4 +44,7 @@ class PrevArrow extends React.Component {
     }
 }
 
+PrevArrow.propsType= {
+
+}
 export default withStyles(style)(PrevArrow)

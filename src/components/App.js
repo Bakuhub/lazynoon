@@ -66,7 +66,6 @@ class App extends React.Component {
                     <ScrollToTop>
                         <ErrorBoundary>
                             <Header/>
-                            <div style={(isWidthUp('md', this.props.width)) ? {paddingTop: '76px'} : null}>
                                 <Route exact path={'/'} component={mainPage}/>
                                 <Route exact path={'/products'} component={Shop}/>
                                 <Route exact path={'/feeds'} component={Feed}/>
@@ -77,7 +76,6 @@ class App extends React.Component {
                                 <Route exact path={'/confirmPage/:orderId'} component={ConfirmPage}/>
                                 <Route exact path={'/loadingPage'} component={LoadingPage}/>
                                 <Route exact path={'/search/:keyword'} component={SearchPage}/>
-                            </div>
                             <Footer/>
                         </ErrorBoundary>
                     </ScrollToTop>

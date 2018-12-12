@@ -1,45 +1,21 @@
 import React from 'react';
 import {Grid, Typography} from '@material-ui/core';
 import {withStyles} from '@material-ui/core/styles';
-import Carousel from '../Widget/Slick/SingleItem'
-import MultiRows from '../Widget/Slick/MultiplyRows'
+import Carousel from '../Widget/Slick/MainPage'
 import {connect} from 'react-redux'
-import MultiItems from '../Widget/Slick/MultiplyItems'
-import FeedsWall from '../Widget/FeedsWall/Wrapper'
 import CategoryOverviewBox from '../Widget/CategoryOverviewBox'
 import LoadingPage from '../Layout/LoadingPage'
-import {isImgOnlySections} from "../../api/ApiUtils";
+import {refactorTextLength} from "../../api/ApiUtils";
+import ProductOverviewBox from '../Widget/Product/overviewBox'
 
-const styles = theme => {
-    return (
-        {
-            section: {
-                width: '100%',
-                margin: '0 80px'
-            },
-            productCategory: {
-                backgroundColor: theme.palette.background.paper
-            },
-            text: {
-                textAlign: 'center',
-                color: theme.palette.secondary.light,
-                marginBottom: '30px',
-                wordWrap: 'break-word',
-                wordBreak: 'break-all'
+const styles = theme => (
+    {
 
-            },
-            title: {
-                marginTop: '50px',
-                fontWeight: '700',
-                color: theme.palette.primary.dark,
-                marginBottom: '20px',
-                textAlign: 'center'
-            }
-
-
-        })
-
-}
+        imgWallElement: {
+            width: '100%',
+            height: '100%',
+        }
+    })
 
 
 const mapStateToProps = state => ({
@@ -58,45 +34,44 @@ class ResponsiveDialog extends React.Component {
         const {classes} = this.props
         return (
             (this.props.feeds && this.props.products) ?
-                <Grid container alignItems={'flex-start'} justify={'center'}>
-
+                <Grid container>
                     <Grid item xs={12}>
                         <Carousel
                             data=
-                                {this.props.feeds
-                                    .filter(n => isImgOnlySections(n.sections))
-                                    .map(n => ({
-                                        link: '/feeds/' + n.id,
-                                        url: n.sections[0].medias[0].url,
-                                        title: n.sections[0].title,
-                                    }))
-
+                                {[{
+                                    url: '/img/MainPage/slick/slick1.jpg',
+                                },
+                                    {
+                                        url: '/img/MainPage/slick/slick2.jpg',
+                                    },
+                                ]
                                 }/>
                     </Grid>
 
-                    
-                    <Grid item xs={12} style={{ marginTop: 80 }}>
-                        <FeedsWall
-                            data={this.props.feeds.filter((n, i) => isImgOnlySections(n.sections))}
-                        />
+
+                    <Grid item xs={12} container alignItems={'center'} direction={'column'}>
+                        <Typography variant={'display1'}>
+                            Be the first to know!
+                        </Typography>
+                        <Typography variant={'subheading'}>
+                            Sign up to our newsletter and we’ll keep you up to date with the latest arrivals
+                        </Typography>
+                        <Typography variant={'display1'}>
+                            Subscribe
+                        </Typography>
                     </Grid>
 
-                    <section className={classes.section}>
-                        <div>
-                            <Typography variant={'display1'} className={classes.title}>
-                                TOP INTERESTING
-                            </Typography>
-                            <Typography variant={'subheading'} className={classes.text}>
-                                Browse the collection of our best selling and top interesting products. You’ll definitely
-                                find
-                                what you are looking for.
-                            </Typography>
-                        </div>
+                    <Grid item container spacing={0} xs={12}>
+                        {
+                            new Array(4).fill(null).map(
+                                (n, i) => <Grid item xs={6}><img
+                                    className={classes.imgWallElement}
+                                    src={`/img/MainPage/imgWall/imgWall${i + 1}.jpg`}
+                                /></Grid>
+                            )
+                        }
 
-                        <div>
-                            <MultiItems data={this.props.products} size={8}/>
-                        </div>
-                    </section>
+                    </Grid>
 
                     <Grid item container alignItems={'center'} justify={'center'} className={classes.productCategory}>
                         <Grid item lg={5} xs={12} container justify={'center'}>
@@ -117,22 +92,16 @@ class ResponsiveDialog extends React.Component {
 
                     </Grid>
 
-                    <section className={classes.section}>
-                        <div>
-                            <Typography variant={'display1'} className={classes.title}>
-                                Featured Products
-                            </Typography>
-                            <Typography variant={'subheading'} className={classes.text}>
-                                Browse the collection of our best selling and top interesting products. You’ll definitely
-                                find
-                                what you are looking for.
-                            </Typography>
-                        </div>
+                    {this.props.products.map((n, y) => <Grid item xs={4}> <ProductOverviewBox
+                        key={y}
+                        id={n.id}
+                        name={refactorTextLength(n.name)}
+                        src={((n.photos || [])[0] || {}).url}
+                        category={n.tags}
+                        regPrice={(n.variants || [])[0] ? n.variants[0].price : 'not a reg price'}
+                        promotePrice={n.promotePrice}
+                    /></Grid>)}
 
-                        <div>
-                            <MultiItems data={this.props.products}/>
-                        </div>
-                    </section>
 
                 </Grid> : <LoadingPage/>
         );
