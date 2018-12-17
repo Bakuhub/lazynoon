@@ -1,34 +1,31 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import {AppBar, BottomNavigation, BottomNavigationAction, Grid, Input} from '@material-ui/core';
-import Button from '../Widget/Button'
-import {fade} from '@material-ui/core/styles/colorManipulator';
+import {BottomNavigation, BottomNavigationAction, Grid, Input} from '@material-ui/core';
 import {withStyles} from '@material-ui/core/styles';
-import PopUp from '../Widget/PopUp'
-import SearchIcon from '@material-ui/icons/Search';
-import DropDownList from './Body/ShoppingCartList'
+import Dialog from '../Widget/Dialog'
 import withWidth, {isWidthUp} from "@material-ui/core/withWidth/index";
 import classNames from "classnames";
 import {withRouter} from "react-router-dom";
 import {connect} from "react-redux";
 import {CART_OPERATE_SHOPPING_CART, COMMON_EDIT_SEARCH_BAR} from "../../constants/actionType";
 import {redirectUrl} from "../../api/ApiUtils";
-
+import NavBar from './NavBar'
 const styles = theme => ({
     logo: {
-        '&:hover': {
-            boxShadow:
-                '2px 2px 0px 0px rgba(237,237,237,1)'
-        },
+        cursor:'pointer',
         width: '80px',
+    },
+    navBar: {
+        width: '50px',
+
     },
     root: {
         backgroundColor: 'white',
         borderBottom: '1px solid ' + theme.palette.secondary.light,
     },
     appBar: {
-        position:'absolute',
-        zIndex:'4000',
+        position: 'absolute',
+        zIndex: '4000',
         backgroundColor: 'none',
         color: 'black',
         width: '100%',
@@ -70,7 +67,7 @@ class Header extends React.Component {
     getInputBar = () =>
         <Input
             onKeyDown={e =>
-                (e.key === 'Enter' && this.state.keyword) ? redirectUrl('/search/' + this.state.keyword,this.props.history) : null
+                (e.key === 'Enter' && this.state.keyword) ? redirectUrl('/search/' + this.state.keyword, this.props.history) : null
             }
             onChange={e => this.setState({keyword: e.target.value})}
 
@@ -94,44 +91,53 @@ class Header extends React.Component {
         if (isWidthUp('md', width)) {
 
             return (
-                    <Grid  className={classes.appBar} container alignItems={'center'} justify={'space-between'}>
-                        <Grid item xs={2}>
-                            <img
-                                className={classes.logo}
-                                onClick={() =>redirectUrl('/',this.props.history)}
-                                src={'https://brandmark.io/logo-rank/random/pepsi.png'}
-                            />
-                        </Grid>
-                        <Grid item >
-                            <img
-                                className={classes.logo}
-                                src={'/img/MainPage/header/logo.png'}
-                            />
-                        </Grid>
-                        <Grid item >
+                <Grid className={classes.appBar} container alignItems={'center'} justify={'space-between'}>
+                    <Grid item >
+                        <Dialog
+                            innerRef={e => this.dialog = e}
+                            title={
+                                <span className={classNames('icon-cart')}/>
+
+                            }
+                            fullScreen={true}
+                            dialog={<NavBar
+                                handleClose={()=>this.dialog.handleClose()}
+
+                            />}
+                        />
+
+                    </Grid>
+                    <Grid item>
+                        <img
+                            className={classes.logo}
+                            onClick={()=>redirectUrl('/',this.props.history,false)}
+                            src={'/img/MainPage/header/logo.png'}
+                        />
+                    </Grid>
+                    <Grid item>
 
                         <span className={classNames('icon-cart')}/>
-                        </Grid>
                     </Grid>
+                </Grid>
             )
 
         }
-        return<BottomNavigation value={value} onChange={this.handleChange} className={classes.root}>
+        return <BottomNavigation value={value} onChange={this.handleChange} className={classes.root}>
 
             <BottomNavigationAction label="Home" value="Home"
-                                    onClick={() => redirectUrl('/',this.props.history)}
+                                    onClick={() => redirectUrl('/', this.props.history)}
                                     icon={<span className={classNames('icon-home', classes.icon)}/>}/>
 
             <BottomNavigationAction label="Products" value="Products"
-                                    onClick={() => redirectUrl('/products',this.props.history)}
+                                    onClick={() => redirectUrl('/products', this.props.history)}
 
                                     icon={<span className={classNames(classes.icon, 'icon-gift')}/>}/>
 
             <BottomNavigationAction label="Feeds" value="Feeds"
-                                    onClick={() => redirectUrl('/feeds',this.props.history)}
+                                    onClick={() => redirectUrl('/feeds', this.props.history)}
                                     icon={<span className={classNames(classes.icon, 'icon-file-text')}/>}/>
             <BottomNavigationAction label="Checkout" value="Checkout"
-                                    onClick={() => redirectUrl('/checkout',this.props.history)}
+                                    onClick={() => redirectUrl('/checkout', this.props.history)}
                                     icon={<span className={classNames(classes.icon, 'icon-coin-dollar')}/>}/>
 
         </BottomNavigation>

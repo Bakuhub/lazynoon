@@ -2,7 +2,6 @@ import React from 'react';
 import {Grid} from '@material-ui/core';
 import {withStyles} from '@material-ui/core/styles';
 import {connect} from 'react-redux'
-import Header from '../Layout/Body/Header'
 import CommentDescription from './Comment&Description/Overview'
 import Detail from './Detail'
 import {getVariantOptions, refactorTextLength} from "../../api/ApiUtils"
@@ -42,14 +41,8 @@ class ResponsiveDialog extends React.Component {
             const variantOptions = getVariantOptions(product.variants)
 
 
-            return <Grid container alignItems={'center'} justify={'center'}>
+            return <Grid container>
                 <Grid item xs={12}>
-                    <Header
-                        title={refactorTextLength(product.name)}
-                        route={'HOME/SHOP/SINGLE PRODUCT'}
-                    />
-                </Grid>
-                <Grid item xs={10}>
 
                     <Detail
                         variantOptions={Object.values(variantOptions)}

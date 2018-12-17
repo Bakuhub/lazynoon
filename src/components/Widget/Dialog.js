@@ -2,7 +2,14 @@ import React, {Fragment} from 'react';
 import {Dialog} from '@material-ui/core';
 import {withStyles} from '@material-ui/core/styles';
 
-const styles = {}
+const styles = theme => ({
+
+    dialog: {
+        backgroundColor: 'white',
+        opacity:'0.91'
+    },
+});
+
 
 class ResponsiveDialog extends React.Component {
 
@@ -26,16 +33,18 @@ class ResponsiveDialog extends React.Component {
     }
 
     render() {
-        const {fullScreen, dialog, title} = this.props;
+        const {fullScreen, dialog,classes, title} = this.props;
 
         return (
             <Fragment>
                 <span onClick={this.handleClickOpen}>{title}</span>
                 <Dialog
+                    className={classes.dialog}
                     fullScreen={fullScreen ? (fullScreen) : false}
                     open={this.state.open}
                     onClose={this.handleClose}
                 >
+
                     {dialog}
                 </Dialog>
             </Fragment>

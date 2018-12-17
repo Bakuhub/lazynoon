@@ -1,18 +1,19 @@
 import React, {Fragment} from 'react';
-import {Button, Divider, Grid, Typography} from '@material-ui/core';
+import {Divider, Grid, Typography} from '@material-ui/core';
 import {withStyles} from '@material-ui/core/styles';
 import {connect} from 'react-redux'
 import SocialIcon from '../Widget/SocialIcon'
-import ColorPick from '../Widget/ColorPicker'
 import Counter from '../Widget/Counter'
 import {formatMoney} from "../../api/ApiUtils";
-import Tag from '../Widget/Tags/Tag'
 import {CART_EDIT_VARIANT, CART_EMPTY_PRODUCT_VARIANT, CART_SAVE_PRODUCT_TO_CART} from "../../constants/actionType";
 import LoadingPage from '../Layout/LoadingPage'
 import {withRouter} from 'react-router-dom'
 import swal from 'sweetalert';
-import Slick from '../Widget/Slick/SingleItem'
-
+import ImgWall from './Comment&Description/ImgWall'
+import ImgWallController from './Comment&Description/ImgWallController'
+import WhiteDropDown from '../Widget/WhiteDropDown'
+import Button from '../Widget/Button'
+import SearchBar from '../Widget/SearchBar/original'
 const styles = theme => {
     return (
         {
@@ -72,19 +73,10 @@ class ResponsiveDialog extends React.Component {
     getVariant = (keyName, index, variantOptions, needRender = true) => {
         let needInit = !(this.props.draft[keyName])
         if (needInit || !needRender) this.props.editCartVariant(keyName, variantOptions[index][0])
-        return needRender ? (keyName === 'color') ?
-            <ColorPick
-                colors={variantOptions[index]}
-                onClick={color => this.props.editCartVariant(keyName, color)}
-                selectedColor={this.props.draft[keyName]}
-            /> :
-            variantOptions[index].map((options, k) => <Tag
-                    key={k}
-                    value={options}
-                    onClick={() => this.props.editCartVariant(keyName, options)}
-                    selected={(this.props.draft[keyName] === options)}
-                />
-            ) : null
+        return variantOptions[index].map(n => ({
+            label: n,
+            onClick: () => this.props.editCartVariant(keyName, n),
+        }))
 
     }
     saveDraftToCart = () => {
@@ -129,12 +121,17 @@ class ResponsiveDialog extends React.Component {
             classes, name, promotePrice,
             description, variantKeys, variantOptions, product
         } = this.props
+        console.log(this.props)
         const selectedVariant = this.findSelectedVariant()
         return (
             selectedVariant ?
-                <Grid container spacing={16} alignItems={'flex-start'} justify={'center'}>
-                    {console.log(this.props)}
-                    <Grid item xs={7} container direction={'column'} spacing={40}>
+                <Grid container spacing={0}>
+                    <Grid item xs={12}>
+                        <ImgWall
+                            tileData={(selectedVariant.photos.length > 0 ? selectedVariant : product).photos.map(n => ({img: n.url,}))}
+                        />
+                    </Grid>
+                    <Grid item xs={12} container direction={'column'}>
                         <Grid item container spacing={16}>
                             <Grid item>
                                 <Typography
@@ -154,7 +151,7 @@ class ResponsiveDialog extends React.Component {
                                         selectedVariant.price)}</Typography>
                                 }
                             </Grid>
-                            <Grid item container direction={'row'} spacing={8} alignItems={'flex-end'}>
+                            <Grid item container direction={'row'} alignItems={'flex-end'}>
                                 <Grid item>
                                     <Typography variant={'subheading'} className={classes.statusLabel}>
                                         In Stock</Typography></Grid>
@@ -164,65 +161,69 @@ class ResponsiveDialog extends React.Component {
                                         SKU MH03</Typography></Grid>
                             </Grid>
                             <Grid item xs={12}>
-                                <Typography variant={'body1'}>
-                                    {description}
-                                </Typography>
+                                <Divider/>
                             </Grid>
-                            <Grid item>
-
-
+                            <Grid item container xs={12}>
+                                <Grid item container xs={7} spacing={32}>
                                 {
                                     variantKeys.map((n, i) =>
 
-                                        <Fragment key={i}>
-                                            <Typography variant={'title'}>
-                                                {n}
-                                            </Typography>
-                                            {this.getVariant(n, i, variantOptions)}
-                                        </Fragment>
+                                        <Grid item  key={i}>
+                                            <WhiteDropDown
+                                                label={n}
+                                                options={
+                                                    this.getVariant(n, i, variantOptions)
+                                                }
+                                                selectedValue={this.props.draft[n]}
+                                            />
+                                        </Grid>
                                     )
-                                }
+                                }</Grid>
 
-                            </Grid>
-
-                            <Grid item container direction={'row'} spacing={32}>
-                                <Grid item>
+                                <Grid item xs={2}>
                                     <Counter
                                         number={this.props.draft.number}
                                         onChange={number => this.props.editCartVariant('number', number)}
                                     />
 
                                 </Grid>
-                                <Grid item>
+                                <Grid item xs={3}>
 
-                                    <Button variant="extendedFab" color={'secondary'}
-                                            onClick={this.saveDraftToCart}
-                                    >
+                                    <Button
+                                        icon={'icon-cart'}
+                                        value={'Add To Cart'}
+                                        onClick={() => this.saveDraftToCart}
+                                    />
 
-                                        <span className={'icon-cart'}/>
-                                        Add To Cart
-                                    </Button>
                                 </Grid>
+
+                            </Grid>
+
+                            <Grid item xs={12}>
+                                <Typography variant={'body1'}>
+                                    {description}
+                                </Typography>
                             </Grid>
                         </Grid>
 
-                        <Divider/>
                         <Grid item container direction={'column'} spacing={16}>
                             <Grid item container spacing={16}>
                                 <Grid item>
-                                    <Button variant="extendedFab" color={'secondary'}>
-                                        <span className={'icon-heart'}/>
-                                    </Button>
+                                    <Button
+                                        icon={'icon-heart'}/>
+                                </Grid>
+                                <Grid item >
+                                    <Button
+                                        icon={'icon-mail2'}
+                                    />
                                 </Grid>
                                 <Grid item>
-                                    <Button variant="extendedFab" color={'secondary'}>
-                                        <span className={'icon-mail2'}/>
-                                    </Button>
-                                </Grid>
-                                <Grid item>
-                                    <Button variant="extendedFab" color={'secondary'}>
-                                        <span className={'icon-coin-dollar'}/>
-                                    </Button>
+                                    <Button
+                                        icon={
+                                            'icon-coin-dollar'
+
+                                        }
+                                    />
                                 </Grid>
                             </Grid>
                             <Grid item>
@@ -233,25 +234,20 @@ class ResponsiveDialog extends React.Component {
                             </Grid>
                             <Grid item>
                                 <SocialIcon type={'whatsapp'}
-                                onClick={()=>window.open('https://web.whatsapp.com/send?text='+window.location.href)}/>
+                                            onClick={() => window.open('https://web.whatsapp.com/send?text=' + window.location.href)}/>
                                 <SocialIcon type={'facebook'}
-                                onClick={()=>window.open('https://www.facebook.com/sharer/sharer.php?u='+window.location.href)}/>
-
+                                            onClick={() => window.open('https://www.facebook.com/sharer/sharer.php?u=' + window.location.href)}/>
                             </Grid>
                         </Grid>
                     </Grid>
-                    <Grid item container xs={5}>
-                        <Grid item xs={12}>
-                            <Slick
-                                data=
-                                    {(selectedVariant.photos.length > 0 ? selectedVariant : product).photos.map(n => ({url: n.url,}))}
-
-                            />
-                        </Grid>
+                    <Grid item xs={5}>
+                        <ImgWallController
+                            tileData={(selectedVariant.photos.length > 0 ? selectedVariant : product).photos.map(n => ({img: n.url,}))}
+                        />
                     </Grid>
                 </Grid> : <LoadingPage/>
 
-        );
+        )
 
     }
 }

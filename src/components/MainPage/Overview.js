@@ -3,10 +3,11 @@ import {Grid, Typography} from '@material-ui/core';
 import {withStyles} from '@material-ui/core/styles';
 import Carousel from '../Widget/Slick/MainPage'
 import {connect} from 'react-redux'
-import CategoryOverviewBox from '../Widget/CategoryOverviewBox'
 import LoadingPage from '../Layout/LoadingPage'
 import {refactorTextLength} from "../../api/ApiUtils";
 import ProductOverviewBox from '../Widget/Product/overviewBox'
+import Button from '../Widget/Button.js'
+import SearchBar from '../Widget/SearchBar/original'
 
 const styles = theme => (
     {
@@ -49,22 +50,34 @@ class ResponsiveDialog extends React.Component {
                     </Grid>
 
 
-                    <Grid item xs={12} container alignItems={'center'} direction={'column'}>
+                    <Grid item xs={12} container alignItems={'center'}  direction={'column'}>
                         <Typography variant={'display1'}>
                             Be the first to know!
                         </Typography>
                         <Typography variant={'subheading'}>
                             Sign up to our newsletter and we’ll keep you up to date with the latest arrivals
                         </Typography>
-                        <Typography variant={'display1'}>
-                            Subscribe
-                        </Typography>
+                        <Grid item container justify={'center'}>
+                            <Grid item >
+                                <SearchBar/>
+                            </Grid>
+                            <Grid item >
+                                <Button
+                                    icon2={'icon-arrow-right2'}
+                                    value={'Subscribe'}
+                                />
+                            </Grid>
+                        </Grid>
+
                     </Grid>
+
 
                     <Grid item container spacing={0} xs={12}>
                         {
                             new Array(4).fill(null).map(
-                                (n, i) => <Grid item xs={6}><img
+                                (n, i) => <Grid item xs={6}
+                                                key={i}
+                                ><img
                                     className={classes.imgWallElement}
                                     src={`/img/MainPage/imgWall/imgWall${i + 1}.jpg`}
                                 /></Grid>
@@ -73,34 +86,19 @@ class ResponsiveDialog extends React.Component {
 
                     </Grid>
 
-                    <Grid item container alignItems={'center'} justify={'center'} className={classes.productCategory}>
-                        <Grid item lg={5} xs={12} container justify={'center'}>
-                            <Typography variant={'display1'} className={classes.title}>
-                                PRODUCT CATEGORIES
-                            </Typography>
-                            <Typography variant={'subheading'} className={classes.text}>
-                                Variety of product categories, tens of products, only five-stars reviews. Browse the
-                                collections
-                                right now.
-                            </Typography>
-                        </Grid>
-                        <Grid item xs={12} md={10} lg={10}>
-                            <CategoryOverviewBox
-                                category={this.props.category}
+
+                    {this.props.products.map((n, y) =>
+                        <Grid item xs={3} key={y}>
+                            <ProductOverviewBox
+                                key={y}
+                                id={n.id}
+                                name={refactorTextLength(n.name)}
+                                src={((n.photos || [])[0] || {}).url}
+                                category={n.tags}
+                                regPrice={(n.variants || [])[0] ? n.variants[0].price : 'not a reg price'}
+                                promotePrice={n.promotePrice}
                             />
-                        </Grid>
-
-                    </Grid>
-
-                    {this.props.products.map((n, y) => <Grid item xs={4}> <ProductOverviewBox
-                        key={y}
-                        id={n.id}
-                        name={refactorTextLength(n.name)}
-                        src={((n.photos || [])[0] || {}).url}
-                        category={n.tags}
-                        regPrice={(n.variants || [])[0] ? n.variants[0].price : 'not a reg price'}
-                        promotePrice={n.promotePrice}
-                    /></Grid>)}
+                        </Grid>)}
 
 
                 </Grid> : <LoadingPage/>

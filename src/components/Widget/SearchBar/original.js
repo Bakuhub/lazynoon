@@ -7,11 +7,10 @@ import {withStyles} from '@material-ui/core/styles';
 
 const styles = theme => ({
     root: {
+        padding:'8px 0px',
         border: '1px solid ' + theme.palette.primary.dark,
-        borderRadius: '5px',
     },
     input: {
-        margin: ' 5px 0 5px 10px ',
     },
 
     icon: {
@@ -28,16 +27,15 @@ class SearchBar extends React.Component {
         weight: '',
         weightRange: '',
         showPassword: false,
-    };
+    }
 
 
     render() {
-        const {classes, placeholder, value, onChange, onKeyPress} = this.props;
+        const {classes, placeholder, value, onChange, onKeyPress} = this.props
 
         return <Input
             fullWidth={true}
             classes={{
-
                 root: classes.root,
                 input: classes.input,
             }}
@@ -45,7 +43,6 @@ class SearchBar extends React.Component {
             placeholder={placeholder}
             defaultValue={value ? value : ''}
             disableUnderline={true}
-            endAdornment={<span className={classNames(classes.icon, 'icon-search')}/>}
             onChange={e => onChange(e.target.value)}
             onKeyPress={e => onKeyPress ? onKeyPress(e.key) : null}
         />

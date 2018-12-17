@@ -1,34 +1,25 @@
 import React from 'react';
-import {Grid, Typography} from '@material-ui/core';
+import {Grid} from '@material-ui/core';
 import List from '../Widget/List'
-import Header from '../Layout/Body/Header'
-import classNames from 'classnames';
 import {connect} from 'react-redux'
 import {EDIT_PRODUCT_VIEW_MODE, PRODUCT_EDIT_FILTER, PRODUCT_EDIT_SORT} from "../../constants/actionType";
 import {withStyles} from '@material-ui/core/styles';
-import WhiteDropDown from '../Widget/WhiteDropDown'
-import ProductOverviewListForm from '../Widget/Product/overviewList'
-import {arrayToFilter, getTagsCountsArray, numberToPagination, refactorTextLength, sort_by} from "../../api/ApiUtils";
+import {getTagsCountsArray, numberToPagination, refactorTextLength, sort_by} from "../../api/ApiUtils";
 import ProductOverviewBox from '../Widget/Product/overviewBox'
 import withWidth, {isWidthUp} from "@material-ui/core/withWidth/index";
-import PopUp from '../Widget/PopUp'
+import Header from '../Layout/Body/Header'
+import WhiteDropDown from '../Widget/WhiteDropDown'
 
 const styles = theme => ({
     productCategory: {
         backgroundColor: '#F7F7F7',
 
     },
-    toolBar: {
-        padding: '10px',
-        backgroundColor: theme.palette.background.paper,
-    },
-    icon: {
-        padding: '10px',
-        cursor: 'pointer',
-        alignItems: 'center',
-        border: '1px solid black',
+    paddingItem: {
+        padding: '20px',
 
-    }, listMode: {
+    },
+    listMode: {
         padding: '20px',
     },
     array: {
@@ -132,123 +123,47 @@ class ShopOverview extends React.Component {
         const products = this.sortData()
         const filterOptions = ['Name A-Z', 'Name Z-A', 'Price Low to High', 'Price High to Low']
         return (
-            <Grid container justify={'center'}>
-                <Grid item xs={12}>
-                    <Header
-                        title={'shop'}
-                        route={'home/shop'}
-                    />
-                </Grid>
-                <Grid item lg={10} spacing={isWidthUp('md', this.props.width) ? 16 : 0} container>
-                    {
-                        isWidthUp('md', this.props.width) ?
-                            <Grid item md={3}>
-                                <Typography variant={'title'}>
-                                    PRODUCT CATEGORIES
-                                </Typography>
-                                {this.getTagsList()}
-                            </Grid> : null
-                    }
-                    <Grid item xs={12} md={9}>
-                        <Grid item container xs={12} alignItems={'center'} justify={'space-between'} direction={'row'}
-                              className={classes.toolBar}>
-                            <Grid item xs={2}>
-                                <span
-                                    onClick={() => this.props.changeViewMode('form')}
-                                    className={classNames(classes.icon, 'icon-table')}/>
-                                <span
-                                    onClick={() => this.props.changeViewMode('list')}
-                                    className={classNames('icon-list', classes.icon)}/>
-                            </Grid>
-                            <Grid item xs={3} container alignItems={'center'} direction={'row'}>
-                                <Grid item>
-                                    <Typography variant={'body2'}>
-                                        Items
-                                    </Typography>
-                                </Grid>
-                                <Grid item>
-                                    {
-                                        products.length > 0 && <WhiteDropDown
-                                            options={
-                                                numberToPagination(this.getProductProperty(products, 'length'),
-                                                    page => this.props.editProductSort('page', page))}
-                                            selectedValue={this.props.sort.page}
-                                        />
-                                    }
-                                </Grid>
-                                <Grid item>
-                                    <Typography variant={'body2'}>
-                                        of {this.getProductProperty(products, 'length')}
-                                    </Typography>
-                                </Grid>
-                            </Grid>
-                            <Grid item xs={3} container alignItems={'center'} direction={'row'}>
+            <Grid container>
+                <Grid item lg={12} justify={'center'} spacing={isWidthUp('md', this.props.width) ? 16 : 0} container>
+                    <Grid item xs={12}>
+                        <Header
+                            title={'products'}
+                        />
+                    </Grid>
 
-                                <Grid item>
-                                    <Typography variant={'body2'}>
-                                        sort by
-                                    </Typography>
-                                </Grid>
-                                <Grid item>
-
-                                    <WhiteDropDown
-                                        options={
-                                            arrayToFilter(
-                                                filterOptions, value => {
-                                                    this.props.editProductSort('sortBy', value)
-                                                    this.initPageNumber(this.getProductProperty(this.sortData(), 'length'))
-                                                }
-                                            )}
-                                        selectedValue={this.props.sort.sortBy}
-                                    />
-                                </Grid>
-                            </Grid>
-                            {
-                                isWidthUp('md', this.props.width) ? null : <Grid item>
-                                    <PopUp
-                                        innerRef={e => this.popUp = e}
-                                        title={
-                                            <Grid container alignItems={'center'}>
-                                                <Typography variant={'body2'}>
-                                                    {this.props.filter.tag ? <Typography
-                                                        variant={'body2'}>{'tags:' + this.props.filter.tag}</Typography> : 'Product Category'}
-                                                </Typography>
-                                                <span className={classes.array + ' ' + 'icon-circle-down'}/>
-                                            </Grid>
-
-                                        }
-                                        popUp={this.getTagsList()}
-                                    />
-
-                                </Grid>
+                    <Grid item xs={5}/>
+                    <Grid item xs={2}>
+                        <WhiteDropDown
+                            label={'sort by: '}
+                            icon2={'icon-circle-down'}
+                            options={
+                                filterOptions.map(n => ({
+                                    label: n,
+                                    onClick: () => console.log(n),
+                                }))
                             }
-                        </Grid>
-                        <Grid item container className={classes.listMode}>
-                            {this.props.viewMode === 'form' ?
+                        />
+                    </Grid>
+                    <Grid item xs={5}/>
 
-                                this.getProductProperty(products, 'display').map((n, i) =>
-                                    <Grid item xs={4} key={i}
-                                    >
-                                        <ProductOverviewBox
-                                            name={refactorTextLength(n.name)}
-                                            id={n.id}
-                                            src={n.photos[0].url}
-                                            category={n.tags}
-                                            regPrice={n.variants[0] ? n.variants[0].price : 'not a reg price'}
-                                            promotePrice={n.promotePrice}
-                                        />
-                                    </Grid>
-                                ) : this.getProductProperty(products, 'display').map((n, i) => (<ProductOverviewListForm
-                                    key={i}
-                                    src={n.photos[0].url}
-                                    name={refactorTextLength(n.name)}
-                                    category={n.tags}
-                                    regPrice={n.variants[0] ? n.variants[0].price : 'not a reg price'}
-                                    promotePrice={n.promotePrice}
-                                    description={n.description}
-                                    id={n.id}
-                                />))}
-                        </Grid>
+                    <Grid item lg={8} container className={classes.listMode}>
+                        {
+
+                            this.getProductProperty(products, 'display').map((n, i) =>
+                                <Grid item xs={4}
+                                      className={classes.paddingItem}
+                                      key={i}
+                                >
+                                    <ProductOverviewBox
+                                        name={refactorTextLength(n.name)}
+                                        id={n.id}
+                                        src={n.photos[0].url}
+                                        category={n.tags}
+                                        regPrice={n.variants[0] ? n.variants[0].price : 'not a reg price'}
+                                        promotePrice={n.promotePrice}
+                                    />
+                                </Grid>
+                            )}
                     </Grid>
                 </Grid>
             </Grid>

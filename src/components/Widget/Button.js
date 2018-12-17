@@ -1,32 +1,24 @@
 import React from 'react';
-import {Grid, Typography} from '@material-ui/core'
+import {Button, Typography} from '@material-ui/core'
 import {withStyles} from '@material-ui/core/styles';
 import PropTypes from "prop-types";
-import {Link} from 'react-router-dom'
-import classesNames from 'classnames'
 
 const styles = theme => ({
     root: {
-        textDecoration: 'none',
-        padding: '3px',
-        color: theme.palette.primary.main,
-        cursor: 'pointer',
-        margin: '0 10px',
-    },
-    btnText: {
-        fontWeight: '600',
-        fontSize: '14px',
-        textTransform: 'uppercase',
-    },
-    border: {
-        border: '1px solid ' + theme.palette.primary.main,
-        borderRadius: '5px',
+        textTransform: 'capitalize',
+        fontSize: '12px',
+        padding: '13px',
+        width:'100%',
+        borderRadius: 0,
+        background: theme.palette.primary.main,
+        border: `2px solid ${theme.palette.primary.main}`,
+        color: 'white',
+        '&:hover': {
+            color: theme.palette.primary.main,
+            background: 'white',
 
+        }
     },
-    icon: {
-        marginRight: '5px',
-        '&:before': {}
-    }
 });
 
 class CustomButton extends React.Component {
@@ -44,33 +36,30 @@ class CustomButton extends React.Component {
         super(props)
         this.state = {
             placeHolder: '',
-
         }
     }
 
     render() {
-        const {
-            classes, link, onClick, value, icon2, icon, border
-        } = this.props;
 
-        return (
+        const {classes, link, onClick, value, icon2, icon, border} = this.props
 
-            <Grid
-                container
-                component={link ? Link : 'span'}
-                to={link ? link : '#'}
-                alignItems={'center'}
-                className={classesNames(classes.root, border ? classes.border : null)}
-                onClick={onClick}
-            >
-                {icon && <span className={classes.icon + ' ' + icon}/>}
-                {value && <Typography variant={'title'} className={classes.btnText}>{value}</Typography>}
-                {icon2 && <span className={classes.icon + ' ' + icon2}/>}
-            </Grid>
+        return <Button
+            className={classes.root}
+            variant={'outlined'}
+            onClick={onClick}
 
-        )
+        >
+            <Typography color={'inherit'} className={icon}/>
+
+            <Typography variant={'body1'} color={'inherit'}>{value}</Typography>
+
+            <Typography color={'inherit'} className={icon2}/>
+        </Button>
+
+
     }
 }
+
 
 CustomButton.propTypes = {
     classes: PropTypes.object.isRequired,

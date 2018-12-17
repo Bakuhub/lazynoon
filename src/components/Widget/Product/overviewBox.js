@@ -22,23 +22,9 @@ const styles = theme => ({
         color: theme.palette.secondary.light,
         marginTop: '15px',
     },
-    box: {
-        backgroundImage: 'url(http://i.imgur.com/hHUa9Ty.jpg)',
-        height: '100%',
-        float: 'left',
-        transition: 'height 1s',
-        webkitTransition: 'height 1s',
-
-        '&:hover': {
-
-            height: '100%'
-        }
-
-    }, root: {
+    root: {
+        position:'relative',
         width: '100%',
-        minHeight: '340px',
-        padding: '10px 20px 20px',
-        borderRadius: '2px'
     },
     img: {
         cursor: 'pointer',
@@ -50,13 +36,14 @@ const styles = theme => ({
         backgroundColor: '#f8f8f8'
     },
 
-    oldPrice: {},
     price: {
         color: '#333333',
         fontFamily: 'arial',
         lineHeight: 1,
     },
     hiddenContent: {
+        top:'30%',
+        position: 'absolute',
         display: 'none'
     },
 
@@ -64,8 +51,9 @@ const styles = theme => ({
         '&:hover >div': {
             display: 'block',
         },
-        '&:hover': {
-            opacity: '0.4',
+        '&:hover >div >img': {
+            transition: '0.5s',
+            opacity: '0.2',
         }
 
     }
@@ -100,26 +88,30 @@ class ResponsiveDialog extends React.Component {
         const {classes, src, name, id, category, regPrice, promotePrice} = this.props;
 
         return (
-            <Grid container className={classNames(classes.root, classes.flowingDown)}
-                  direction={'column'}
-                  alignItems={'center'}
-                  style={{backgroundImage: `url(${src})`}}
-                  onClick={() => id && redirectUrl('/products/' + id, this.props.history)}
+            <Grid
+
+                container className={classNames( classes.root,classes.flowingDown)}
+                direction={'column'}
+                alignItems={'center'}
+                onClick={() => id && redirectUrl('/products/' + id, this.props.history)}
 
             >
-                <Grid item className={classes.hiddenContent}>
+                <Grid item>
+                    <img src={src}
+                         className={classes.root}
+                    />
+                </Grid>
+                <Grid item xs={12} className={classes.hiddenContent}>
 
                     {
                         category && <Typography variant={'headline'}
                                                 className={classes.category}
-
                                                 color={'primary'}>{category && category.join(',')}</Typography>
 
                     }
                     <Typography variant={'title'}
                                 onClick={() => window.location.href = ('/products/' + id)}
                                 className={classes.name}
-
                     >{name}</Typography>
                     {
                         (promotePrice) ?
@@ -131,11 +123,8 @@ class ResponsiveDialog extends React.Component {
                             </Grid>
                             : <Typography variant={'caption'}
                                           className={classes.price}>$ {formatMoney(regPrice)}</Typography>
-
                     }
                 </Grid>
-
-
             </Grid>
         );
     }

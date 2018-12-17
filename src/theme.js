@@ -6,15 +6,22 @@ const theme = createMuiTheme({
         fontFamily: [
       'open sans'
         ].join(','),
+        fontSize: 14,
+
     },
     palette: {
         primary: {
-            main: '#020103',
+            main: '#0C1631',
 
 
         },
         secondary: {
             main: '#949494',
+
+        },
+        text: {
+            inputBorder: '#D9D8D7',
+            inputBackground: '#F9F9F9',
 
         },
         background: {

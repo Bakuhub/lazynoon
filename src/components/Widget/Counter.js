@@ -5,9 +5,11 @@ import {Grid, Input, Typography} from '@material-ui/core';
 
 const styles = theme => {
     return ({
-        root: {},
+        root: {
+            width:'100%'
+        },
         operator: {
-            padding: '10px',
+            padding: '12px',
             cursor: 'pointer',
 
             MozUserSelect: '-moz-none',
@@ -15,14 +17,13 @@ const styles = theme => {
             WebkitUserSelect: 'none',
             OUserSelect: 'none',
             userSelect: 'none',
-            border: '1px solid ' + theme.palette.secondary.light,
-
+            border: `1px solid ${theme.palette.text.inputBorder}`,
         },
         input: {
-            borderTop: '1px solid ' + theme.palette.secondary.light,
-            borderBottom: '1px solid ' + theme.palette.secondary.light,
+            borderTop: `1px solid ${theme.palette.text.inputBorder}`,
+            borderBottom: `1px solid ${theme.palette.text.inputBorder}`,
             maxWidth: '60px',
-            padding: '6px 20px',
+            padding: '8px 20px',
             cursor: 'pointer',
         }
     });

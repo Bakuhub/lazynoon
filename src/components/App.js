@@ -23,7 +23,7 @@ import LoadingPage from './Layout/LoadingPage'
 import '../constants/Style.css'
 import SearchPage from './Search/Overview'
 import 'font-awesome/css/font-awesome.min.css'
-
+import MyCredits from './Layout/MyCredits'
 const mapStateToProps = state => ({});
 
 
@@ -66,7 +66,9 @@ class App extends React.Component {
                     <ScrollToTop>
                         <ErrorBoundary>
                             <Header/>
-                                <Route exact path={'/'} component={mainPage}/>
+                            <MyCredits/>
+
+                            <Route exact path={'/'} component={mainPage}/>
                                 <Route exact path={'/products'} component={Shop}/>
                                 <Route exact path={'/feeds'} component={Feed}/>
                                 <Route exact path={'/feeds/:id'} component={FeedDetail}/>

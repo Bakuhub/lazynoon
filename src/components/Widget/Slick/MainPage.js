@@ -2,8 +2,8 @@ import React from "react";
 import Slider from "react-slick";
 import {withStyles} from '@material-ui/core/styles';
 import {Grid,Typography} from '@material-ui/core'
-import NextArrow from './NextArrow'
-import PrevArrow from './PrevArrow'
+import NextArrow from './MainPageSecondImgDot'
+import PrevArrow from './MainPageFirstImgDot'
 import {withRouter} from 'react-router-dom'
 import {redirectUrl} from "../../../api/ApiUtils";
 

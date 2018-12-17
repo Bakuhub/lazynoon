@@ -1,18 +1,24 @@
 import React, {Fragment} from 'react';
 import {withStyles} from '@material-ui/core/styles';
 import PropTypes from "prop-types";
-import {ListItem, Typography} from '@material-ui/core';
+import {Grid, ListItem, Typography} from '@material-ui/core';
 import MenuItem from '@material-ui/core/MenuItem';
 import Menu from '@material-ui/core/Menu';
 
 const styles = theme => ({
-    root: {},
+    root: {
+        border: `1px solid ${theme.palette.text.inputBorder}`,
+        backgroundColor:theme.palette.text.inputBackground,
+
+    },
     title: {
         fontWeight: 'lighter',
     },
     btnText: {},
     icon: {
         marginRight: '5px',
+        marginLeft: '5px',
+
     }
 
 });
@@ -36,8 +42,8 @@ class WhiteDropDown extends React.Component {
         this.setState({anchorEl: null});
     };
 
-    constructor() {
-        super()
+    constructor(props) {
+        super(props)
         this.state = {
             anchorEl: null,
             selectedIndex: 0,
@@ -60,14 +66,16 @@ class WhiteDropDown extends React.Component {
                           className={classes.root}
                           onClick={this.handleClickListItem}
                 >
-                    {icon && <span className={classes.icon + ' ' + icon}/>}
-                    <Typography variant={'body2'}>
-                        {label}{labelExtra}
-                    </Typography>
-                    <Typography variant={'body2'}>
-                        {selectedValue ? selectedValue : options[this.state.selectedIndex].label}
-                    </Typography>
-                    {icon2 && <span className={classes.icon + ' ' + icon2}/>}
+                    <Grid container alignItems={'center'} justify={'center'}>
+                        {icon && <span className={classes.icon + ' ' + icon}/>}
+                        <Typography variant={'body2'}>
+                            {label}{labelExtra}
+                        </Typography>
+                        <Typography variant={'body2'}>
+                            {selectedValue ? selectedValue : options[this.state.selectedIndex].label}
+                        </Typography>
+                        {icon2 && <span className={classes.icon + ' ' + icon2}/>}
+                    </Grid>
                 </ListItem>
 
                 <Menu
@@ -75,7 +83,6 @@ class WhiteDropDown extends React.Component {
                     anchorEl={anchorEl}
                     open={Boolean(anchorEl)}
                     onClose={this.handleClose}
-
                 >
                     {options.map((n, i) => (
                         <MenuItem
