@@ -7,9 +7,12 @@ import Menu from '@material-ui/core/Menu';
 
 const styles = theme => ({
     root: {
-        border: `1px solid ${theme.palette.text.inputBorder}`,
-        backgroundColor:theme.palette.text.inputBackground,
-
+        border: `1px solid ${theme.palette.input.border}`,
+backgroundColor:'white',
+    },
+    label:{
+        fontWeight:'bold',
+        textTransform:'upperCase',
     },
     title: {
         fontWeight: 'lighter',
@@ -68,7 +71,7 @@ class WhiteDropDown extends React.Component {
                 >
                     <Grid container alignItems={'center'} justify={'center'}>
                         {icon && <span className={classes.icon + ' ' + icon}/>}
-                        <Typography variant={'body2'}>
+                        <Typography variant={'body2'} className={classes.label}>
                             {label}{labelExtra}
                         </Typography>
                         <Typography variant={'body2'}>

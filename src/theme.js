@@ -20,13 +20,17 @@ const theme = createMuiTheme({
 
         },
         text: {
-            inputBorder: '#D9D8D7',
-            inputBackground: '#F9F9F9',
 
         },
+        input:{
+            border: '#D9D8D7',
+            background: '#F9F9F9',
+
+        },
+
         background: {
 
-            default: "#fafafa",
+            default: "#FFFDFB",
             paper: "#f7f7f7",
         },
         success: {
@@ -35,7 +39,6 @@ const theme = createMuiTheme({
         },
         error: {
             main: '#d34a34',
-
         },
         info: {
 

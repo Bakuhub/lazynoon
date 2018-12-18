@@ -12,11 +12,15 @@ import WhiteDropDown from '../Widget/WhiteDropDown'
 
 const styles = theme => ({
     productCategory: {
-        backgroundColor: '#F7F7F7',
+
+    },
+    root:{
+        backgroundColor: theme.palette.background.default,
 
     },
     paddingItem: {
-        padding: '20px',
+        padding: '40px',            inputBackground: '#F9F9F9',
+
 
     },
     listMode: {
@@ -123,7 +127,7 @@ class ShopOverview extends React.Component {
         const products = this.sortData()
         const filterOptions = ['Name A-Z', 'Name Z-A', 'Price Low to High', 'Price High to Low']
         return (
-            <Grid container>
+            <Grid container className={classes.root}>
                 <Grid item lg={12} justify={'center'} spacing={isWidthUp('md', this.props.width) ? 16 : 0} container>
                     <Grid item xs={12}>
                         <Header
@@ -146,7 +150,7 @@ class ShopOverview extends React.Component {
                     </Grid>
                     <Grid item xs={5}/>
 
-                    <Grid item lg={8} container className={classes.listMode}>
+                    <Grid item lg={12} container className={classes.listMode}>
                         {
 
                             this.getProductProperty(products, 'display').map((n, i) =>
